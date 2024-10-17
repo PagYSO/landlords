@@ -7,7 +7,8 @@ PlayHand::PlayHand()
 
 PlayHand::PlayHand(Cards &cards)
 {
-
+    classify(cards);
+    judgeCardType();
 }
 
 PlayHand::PlayHand(HandType type, Card::CardPoint pt, int extra)

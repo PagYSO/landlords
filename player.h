@@ -71,6 +71,8 @@ public:
     //利用多态来实现机器人准备叫地主与准备出牌
     virtual void prepareCallLord();
     virtual void preparePlayHand();
+    virtual void thinkCallLord();
+    virtual void thinkPlayHand();
 signals:
 
     //权限改为受保护的，使子类也能够继承
@@ -82,8 +84,8 @@ protected:
     Direction m_dirc;
     Type m_type;
     bool m_isWin;
-    Player* m_prev;
-    Player* m_next;
+    Player* m_prev=nullptr;
+    Player* m_next=nullptr;
     Cards m_cards;//存储多张扑克牌（玩家手中的牌）
     Cards m_pendcards;//打出的牌
     Player* m_pendplayer;//谁打出的牌

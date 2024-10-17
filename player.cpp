@@ -156,3 +156,14 @@ void Player::preparePlayHand()
 {
 
 }
+
+void Player::thinkCallLord()
+{
+
+}
+
+void Player::thinkPlayHand()
+{
+
+
+}
