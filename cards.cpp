@@ -129,6 +129,7 @@ CardList Cards::toCardList(SortType type)
     else if(type==Desc){
         std::sort(list.begin(),list.end(),greaterSort);
     }
+    return list;
 }
 
 

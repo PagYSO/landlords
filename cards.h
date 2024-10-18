@@ -49,7 +49,7 @@ public:
 
     //QVector<Card>
     //QSet->QVector
-    CardList toCardList(SortType type);
+    CardList toCardList(SortType type=Desc);
 
 private:
     QSet<Card> m_cards;
