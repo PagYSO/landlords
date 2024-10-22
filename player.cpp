@@ -3,10 +3,11 @@
 Player::Player(QObject *parent)
     : QObject{parent}
 {
-
+    m_score=0;
+    m_isWin=false;
 }
 
-Player::Player(QString name, QObject *parent)
+Player::Player(QString name, QObject *parent):Player(parent)
 {
     m_name=name;
 }
@@ -16,7 +17,7 @@ void Player::setName(QString name)
     m_name=name;
 }
 
-QString Player::name()
+QString Player::getName()
 {
     return m_name;
 }
@@ -26,7 +27,7 @@ void Player::setRole(Role role)
     m_role=role;
 }
 
-Player::Role Player::role()
+Player::Role Player::getRole()
 {
     return m_role;
 }
@@ -36,19 +37,19 @@ void Player::setSex(Sex sex)
     m_sex=sex;
 }
 
-Player::Sex Player::sex()
+Player::Sex Player::getSex()
 {
     return m_sex;
 }
 
-void Player::setDirection(Direction dirc)
+void Player::setDirection(Direction direction)
 {
-    m_dirc=dirc;
+    m_direction = direction;
 }
 
-Player::Direction Player::dirc()
+Player::Direction Player::getDirection()
 {
-    return m_dirc;
+    return m_direction;
 }
 
 void Player::setType(Type type)
@@ -56,7 +57,7 @@ void Player::setType(Type type)
     m_type=type;
 }
 
-Player::Type Player::type()
+Player::Type Player::getType()
 {
     return m_type;
 }
@@ -66,7 +67,7 @@ void Player::setScore(int score)
     m_score=score;
 }
 
-int Player::score()
+int Player::getScore()
 {
     return m_score;
 }
@@ -91,30 +92,35 @@ void Player::setNextPlayer(Player *player)
     m_next=player;
 }
 
-Player *Player::PrevPlayer()
+Player *Player::getPrevPlayer()
 {
     return m_prev;
 }
 
-Player *Player::NextPlayer()
+Player *Player::getNextPlayer()
 {
     return m_next;
 }
 
 void Player::grabLordBet(int point)
 {
-
+    emit notifyGrabLordBet(this,point);
 }
 
-void Player::StoreDispatchCard(Card &card)
+void Player::storeDispatchCard(const Card &card)
 {
     m_cards.add(card);
+    Cards cs;
+    cs.add(card);
+    emit notifyPickCards(this, cs);
 }
 
-void Player::StoreDispatchCards(Cards &cards)
+void Player::storeDispatchCard(const Cards &cards)
 {
     m_cards.add(cards);
+    emit notifyPickCards(this, cards);
 }
+
 
 Cards Player::getCards()
 {
@@ -126,25 +132,25 @@ void Player::clearCards()
     m_cards.clearCard();
 }
 
-void Player::playHand(Cards &cards)
+void Player::playHand(const Cards &cards)
 {
     m_cards.remove(cards);
 }
 
-void Player::setPendingInfo(Player *player, Cards &cards)
+void Player::storePendingInfo(Player *player,const Cards &cards)
 {
-    m_pendplayer=player;
-    m_pendcards=cards;
+    m_pendPlayer=player;
+    m_pendCards=cards;
 }
 
 Player *Player::getPendPlayer()
 {
-    return m_pendplayer;
+    return m_pendPlayer;
 }
 
 Cards Player::getPendCards()
 {
-    return m_pendcards;
+    return m_pendCards;
 }
 
 void Player::prepareCallLord()
@@ -167,3 +173,4 @@ void Player::thinkPlayHand()
 
 
 }
+

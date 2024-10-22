@@ -8,7 +8,6 @@ class myButton : public QPushButton
     Q_OBJECT
 public:
     explicit myButton(QWidget *parent = nullptr);
-
     void setImage(QString normal,QString hover,QString pressed);
 
 protected:
@@ -22,6 +21,7 @@ protected:
     void leaveEvent(QEvent* ev);
     //绘图
     void paintEvent(QPaintEvent* ev);
+
 
 signals:
 private:

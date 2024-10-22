@@ -1,7 +1,6 @@
 #include "buttongroup.h"
 #include "ui_buttongroup.h"
 
-
 ButtonGroup::ButtonGroup(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ButtonGroup)
@@ -14,53 +13,71 @@ ButtonGroup::~ButtonGroup()
     delete ui;
 }
 
-void ButtonGroup::initButton()
+void ButtonGroup::initButtons()
 {
-    //开始游戏
-    ui->start->setImage(":/images/start-1.png",":/images/start-2.png",":/images/start-3.png");
-    //出牌
-    ui->playcard->setImage(":/images/chupai_btn-1.png",":/images/chupai_btn-2.png",":/images/chupai_btn-3.png");
-    ui->pickcards->setImage(":/images/chupai_btn-1.png",":/images/chupai_btn-2.png",":/images/chupai_btn-3.png");
-    //不要
-    ui->pass->setImage(":/images/pass_btn-1.png",":/images/pass_btn-2.png",":/images/pass_btn-3.png");
-    //不枪
-    ui->notcallLord->setImage(":/images/buqiang-1.png",":/images/buqiang-2.png",":/images/buqiang-3.png");
-    //1,2,3分
-    ui->onescore->setImage(":/images/1fen-1.png",":/images/1fen-2.png",":/images/1fen-3.png");
-    ui->twoscore->setImage(":/images/2fen-1.png",":/images/2fen-2.png",":/images/2fen-3.png");
-    ui->threescore->setImage(":/images/3fen-1.png",":/images/3fen-2.png",":/images/3fen-3.png");
-    //设置按钮大小
+    ui->start->setImage(":/images/start-1.png", ":/images/start-3.png", ":/images/start-2.png");
+    ui->playCard->setImage(":/images/chupai_btn-1.png", ":/images/chupai_btn-3.png", ":/images/chupai_btn-2.png");
+    ui->playCard1->setImage(":/images/chupai_btn-1.png", ":/images/chupai_btn-3.png", ":/images/chupai_btn-2.png");
+
+    ui->pass->setImage(":/images/pass_btn-1.png", ":/images/pass_btn-3.png", ":/images/pass_btn-2.png");
+    ui->giveup->setImage(":/images/buqiang-1.png", ":/images/buqiang-3.png", ":/images/buqiang-2.png");
+    ui->oneScore->setImage(":/images/1fen-1.png", ":/images/1fen-3.png", ":/images/1fen-2.png");
+    ui->twoScore->setImage(":/images/2fen-1.png", ":/images/2fen-3.png", ":/images/2fen-2.png");
+    ui->threeScore->setImage(":/images/3fen-1.png", ":/images/3fen-3.png", ":/images/3fen-2.png");
+
     QVector<myButton*> btns;
-    btns<<ui->start<<ui->playcard<<ui->pickcards<<ui->pass
-       <<ui->notcallLord<<ui->onescore<<ui->twoscore
-      <<ui->threescore;
-    for(int i=0;i<btns.size();i++){
-        btns[i]->setFixedSize(90,45);
+    btns << ui->start << ui->playCard << ui->playCard1 << ui->pass
+         << ui->giveup << ui->oneScore << ui->twoScore << ui->threeScore;
+    for(int i=0; i<btns.size(); ++i)
+    {
+        btns[i]->setFixedSize(90, 45);
     }
 
-    connect(ui->start,&myButton::clicked,this,&ButtonGroup::startGame);
-    connect(ui->playcard,&myButton::clicked,this,&ButtonGroup::PlayHand);
-    connect(ui->pickcards,&myButton::clicked,this,&ButtonGroup::PlayHand);
-    connect(ui->pass,&myButton::clicked,this,&ButtonGroup::pass);
-    connect(ui->notcallLord,&myButton::clicked,this,[=]{
+    connect(ui->start, &myButton::clicked, this, &ButtonGroup::startGame);
+    connect(ui->playCard, &myButton::clicked, this, &ButtonGroup::playHand);
+    connect(ui->playCard1, &myButton::clicked, this, &ButtonGroup::playHand);
+    connect(ui->pass, &myButton::clicked, this, &ButtonGroup::pass);
+    connect(ui->giveup, &myButton::clicked, this, [=]()
+    {
         emit betPoint(0);
     });
-    connect(ui->onescore, &myButton::clicked, this, [=]()
+    connect(ui->oneScore, &myButton::clicked, this, [=]()
     {
         emit betPoint(1);
     });
-    connect(ui->twoscore, &myButton::clicked, this, [=]()
+    connect(ui->twoScore, &myButton::clicked, this, [=]()
     {
         emit betPoint(2);
     });
-    connect(ui->threescore, &myButton::clicked, this, [=]()
+    connect(ui->threeScore, &myButton::clicked, this, [=]()
     {
         emit betPoint(3);
     });
-
 }
 
-void ButtonGroup::ChangePages(Pages type)
+void ButtonGroup::selectPanel(Panel type, int bet)
 {
     ui->stackedWidget->setCurrentIndex(type);
+    if(type != CallLord)
+    {
+        return;
+    }
+    if(bet == 0)
+    {
+        ui->oneScore->setVisible(true);
+        ui->twoScore->setVisible(true);
+        ui->threeScore->setVisible(true);
+    }
+    else if(bet == 1)
+    {
+        ui->oneScore->setVisible(false);
+        ui->twoScore->setVisible(true);
+        ui->threeScore->setVisible(true);
+    }
+    else if(bet == 2)
+    {
+        ui->oneScore->setVisible(false);
+        ui->twoScore->setVisible(false);
+        ui->threeScore->setVisible(true);
+    }
 }

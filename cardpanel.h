@@ -11,38 +11,38 @@ class CardPanel : public QWidget
 public:
     explicit CardPanel(QWidget *parent = nullptr);
 
-    //设置图片函数
-    void setImage(QPixmap &front,QPixmap &back);
-    QPixmap Image();
+    void setImage(const QPixmap &front, const QPixmap &back);
+    QPixmap getImage();
 
-    //扑克牌显示哪一面
-    //true为正面，false为负面
     void setFrontSide(bool flag);
     bool isFrontSide();
 
-    //标记扑克牌是否被选中
-    void setSelected(bool flag);
+    void setSeclected(bool flag);
     bool isSelected();
 
-    //显示出正面的扑克牌的点数和花色
-    void setCard(Card &card);
-    Card card();
+    void setCard(const Card& card);
+    Card getCard();
 
-    //扑克牌的所有者
-    void setOwner(Player *player);
-    Player* Owner();
+    void setOwner(Player* player);
+    Player* getOwner();
+
+    void clicked();
+
 protected:
-    void paintEvent(QPaintEvent* event);
+    void paintEvent(QPaintEvent *event);
     void mousePressEvent(QMouseEvent* event);
+
+signals:
+    void cardSelected(Qt::MouseButton button);
+
 private:
     QPixmap m_front;
     QPixmap m_back;
-    bool m_isFront;
-    bool m_isSelected;
+    bool m_isfront = true;
+    bool m_isSelect = false;
     Card m_card;
-    Player* m_owner;
-signals:
-
+    Player* m_owner = nullptr;
 };
 
 #endif // CARDPANEL_H
+

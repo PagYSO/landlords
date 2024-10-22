@@ -10,6 +10,7 @@ class Cards
 public:
     enum SortType{Asc,Desc,NoSort};
     Cards();
+    explicit Cards(const Card& card);
     //添加扑克牌
     void add(const Card& card);
     void add(const Cards& cards);
@@ -30,6 +31,7 @@ public:
 
     //是否为空
     bool isEmpty();
+    bool isEmpty() const;
 
     //清空扑克牌
     void clearCard();

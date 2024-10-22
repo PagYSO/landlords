@@ -11,16 +11,17 @@ myButton::myButton(QWidget *parent)
 
 void myButton::setImage(QString normal, QString hover, QString pressed)
 {
-    m_normal=normal;
-    m_hover=hover;
-    m_pressed=pressed;
+    m_normal = normal;
+    m_hover = hover;
+    m_pressed = pressed;
     m_pixmap.load(m_normal);
     update();
 }
 
 void myButton::MousePressEvent(QMouseEvent *ev)
 {
-    if(ev->button()==Qt::LeftButton){
+    if(ev->button() == Qt::LeftButton)
+    {
         m_pixmap.load(m_pressed);
         update();
     }
@@ -29,7 +30,8 @@ void myButton::MousePressEvent(QMouseEvent *ev)
 
 void myButton::MouseRealseEvent(QMouseEvent *ev)
 {
-    if(ev->button()==Qt::LeftButton){
+    if(ev->button() == Qt::LeftButton)
+    {
         m_pixmap.load(m_normal);
         update();
     }
@@ -38,19 +40,21 @@ void myButton::MouseRealseEvent(QMouseEvent *ev)
 
 void myButton::enterEvent(QEvent *ev)
 {
+    Q_UNUSED(ev)
     m_pixmap.load(m_hover);
     update();
-
 }
 
 void myButton::leaveEvent(QEvent *ev)
 {
+    Q_UNUSED(ev)
     m_pixmap.load(m_normal);
     update();
 }
 
 void myButton::paintEvent(QPaintEvent *ev)
 {
+    Q_UNUSED(ev)
     QPainter p(this);
-    p.drawPixmap(rect(),m_pixmap);
+    p.drawPixmap(rect(), m_pixmap);
 }

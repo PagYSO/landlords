@@ -55,3 +55,9 @@ bool operator ==(const Card& left, const Card& right){
 uint qHash(const Card& card){
     return card.point()*100+card.suit();
 }
+
+bool operator <(const Card& c1, const Card& c2)
+{
+    return lessSort(c1, c2);
+}
+

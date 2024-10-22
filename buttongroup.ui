@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>580</width>
+    <width>588</width>
     <height>121</height>
    </rect>
   </property>
@@ -32,7 +32,7 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="Startpage">
       <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -87,7 +87,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="myButton" name="playcard">
+        <widget class="myButton" name="playCard">
          <property name="text">
           <string>PushButton</string>
          </property>
@@ -147,7 +147,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="myButton" name="pickcards">
+        <widget class="myButton" name="playCard1">
          <property name="text">
           <string>PushButton</string>
          </property>
@@ -186,7 +186,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="myButton" name="notcallLord">
+          <widget class="myButton" name="giveup">
            <property name="text">
             <string>PushButton</string>
            </property>
@@ -209,7 +209,7 @@
           </spacer>
          </item>
          <item>
-          <widget class="myButton" name="onescore">
+          <widget class="myButton" name="oneScore">
            <property name="text">
             <string>PushButton</string>
            </property>
@@ -232,7 +232,7 @@
           </spacer>
          </item>
          <item>
-          <widget class="myButton" name="twoscore">
+          <widget class="myButton" name="twoScore">
            <property name="text">
             <string>PushButton</string>
            </property>
@@ -255,7 +255,7 @@
           </spacer>
          </item>
          <item>
-          <widget class="myButton" name="threescore">
+          <widget class="myButton" name="threeScore">
            <property name="text">
             <string>PushButton</string>
            </property>

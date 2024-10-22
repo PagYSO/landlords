@@ -6,6 +6,11 @@ Cards::Cards()
 
 }
 
+Cards::Cards(const Card &card)
+{
+    add(card);
+}
+
 void Cards::add(const Card &card)
 {
     m_cards.insert(card);
@@ -15,6 +20,14 @@ void Cards::add(const Cards &cards)
 {
     //合并集合
     m_cards.unite(cards.m_cards);
+}
+
+void Cards::add(const QVector<Cards> &cards)
+{
+    for(int i=0; i<cards.count(); ++i)
+    {
+        add(cards.at(i));
+    }
 }
 
 Cards &Cards::operator <<(const Card &card)
@@ -28,6 +41,7 @@ Cards &Cards::operator <<(const Cards &cards)
     add(cards);
     return *this;
 }
+
 
 void Cards::remove(const Card &card)
 {
@@ -52,6 +66,11 @@ int Cards::CardCount()
 }
 
 bool Cards::isEmpty()
+{
+    return m_cards.empty();
+}
+
+bool Cards::isEmpty() const
 {
     return m_cards.empty();
 }

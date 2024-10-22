@@ -12,44 +12,43 @@ public:
     // 出牌组合或者方式
     enum HandType
     {
-        Hand_Unknown,
-        Hand_Pass,
+        Hand_Unknown,               // 未知
+        Hand_Pass,                  // 过
 
-        Hand_Single,
-        Hand_Pair,
+        Hand_Single,                // 单
+        Hand_Pair,                  // 对
 
-        Hand_Triple,
-        Hand_Triple_Single,
-        Hand_Triple_Pair,
+        Hand_Triple,                // 三个
+        Hand_Triple_Single,         // 三带一
+        Hand_Triple_Pair,           // 三带二
 
-        Hand_Plane,
-        Hand_Plane_Two_Single,
-        Hand_Plane_Two_Pair,
+        Hand_Plane,                 // 飞机，555_666
+        Hand_Plane_Two_Single,      // 飞机带单，555_666_3_4
+        Hand_Plane_Two_Pair,        // 飞机带双，555_666_33_44
 
-        Hand_Seq_Pair,
-        Hand_Seq_Single,
-        Hand_Bomb,
-        Hand_Bomb_Single,
-        Hand_Bomb_Pair,
-        Hand_Bomb_Two_Single,
+        Hand_Seq_Pair,              // 连对，33_44_55(_66...)
+        Hand_Seq_Single,            // 顺子，34567(8...)
 
-        Hand_Bomb_Jokers,
-        Hand_Bomb_Jokers_Single,
-        Hand_Bomb_Jokers_Pair,
-        Hand_Bomb_Jokers_Two_Single
+        Hand_Bomb,                  // 炸弹
+        Hand_Bomb_Single,           // 炸弹带一个
+        Hand_Bomb_Pair,             // 炸弹带一对
+        Hand_Bomb_Two_Single,       // 炸弹带两单
+
+        Hand_Bomb_Jokers,           // 王炸
+        Hand_Bomb_Jokers_Single,    // 王炸带一个
+        Hand_Bomb_Jokers_Pair,      // 王炸带一对
+        Hand_Bomb_Jokers_Two_Single	// 王炸带两单
     };
 
     PlayHand();
     explicit PlayHand(Cards& cards);
     PlayHand(HandType type, Card::CardPoint pt, int extra);
 
-    //获取出牌类型
+
     HandType getHandType();
-    //获取手牌点数
     Card::CardPoint getCardPoint();
     int getExtra();
 
-    //是否出牌能胜过对手
     bool canBeat(const PlayHand& other);
 
 private:
@@ -67,9 +66,13 @@ private:
     bool isSeqPair();
     bool isSeqSingle();
     bool isBomb();
+    bool isBombSingle();
     bool isBombPair();
     bool isBombTwoSingle();
     bool isBombJokers();
+    bool isBombJokersSingle();
+    bool isBombJokersPair();
+    bool isBombJokersTwoSingle();
 
 private:
     HandType m_type;
@@ -80,6 +83,5 @@ private:
     QVector<Card::CardPoint> m_threeCard;
     QVector<Card::CardPoint> m_fourCard;
 };
-
 
 #endif // PLAYHAND_H

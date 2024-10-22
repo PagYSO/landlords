@@ -6,32 +6,44 @@
 #include "userplayer.h"
 #include "cards.h"
 
+struct BetRecord
+{
+    BetRecord()
+    {
+        reset();
+    }
+    void reset()
+    {
+        player = nullptr;
+        bet = 0;
+        times = 0;
+    }
+    Player* player;
+    int bet;
+    int times;
+};
+
 class GameControl : public QObject
 {
     Q_OBJECT
 public:
-    explicit GameControl(QObject *parent = nullptr);
-
-    //游戏状态
-    enum GameStatus{
-        //发牌
-        DispatchCards,
-        //叫地主
+    enum GameStatus
+    {
+        DispatchCard,
         CallingLord,
-        //出牌
         PlayingHand
     };
-    //玩家状态
-    enum PlayerStatus{
-        ThinkForLord,
-        ThinkForPlayHand,
+    enum PlayerStatus
+    {
+        ThinkingForCallLord,
+        ThinkingForPlayHand,
         Winning
     };
 
-    //初始化玩家
-    void PlayerInit();
+    explicit GameControl(QObject *parent = nullptr);
 
-    //得到玩家的实例对象
+    void playerInit();
+
     Robot* getLeftRobot();
     Robot* getRightRobot();
     UserPlayer* getUserPlayer();
@@ -39,40 +51,40 @@ public:
     void setCurrentPlayer(Player* player);
     Player* getCurrentPlayer();
 
-    //得到出牌玩家与出的牌
     Player* getPendPlayer();
     Cards getPendCards();
 
-    //初始化扑克牌
-    void initallCards();
+    void initAllCards();
+    Card takeOneCard();
+    Cards getSurplusCards();
+    void resetCardData();
 
-    //每次发一张牌
-    Card pickOne();
-    //最后三张底牌
-    Cards lastThree();
-    //重置卡牌数据
-    void reset();
+    void startLordCard();
+    void becomeLord(Player *player, int bet);
+    void clearPlayerScore();
+    int getPlayerMaxBet();
 
-    //准备叫地主
-    void startCallLord();
-    //成为地主
-    void becomLord(Player* player);
-
-    //清空的分
-    void clearScore();
-
-    //处理叫地主
+    void onGrabBet(Player* player, int bet);
+    void onPlayHand(Player *player, const Cards &card);
 
 signals:
+    void playerStatusChanged(Player* player, PlayerStatus status);
+    void notifyGrabLordBet(Player* player, int bet, bool flag);
+    void gameStatusChanged(GameStatus status);
+    void notifyPlayHand(Player* player, const Cards& card);
+    void pendingInfo(Player* player, const Cards& card);
 
 private:
-    Robot* m_robotLeft;
-    Robot* m_robotRight;
-    UserPlayer* m_userplayer;
-    Player* m_curplayer;
-    Player* m_pendplayer;
+    Robot* m_robotLeft = nullptr;
+    Robot* m_robotRight = nullptr;
+    UserPlayer* m_user = nullptr;
+    Player* m_currPlayer = nullptr;
+    Player* m_pendPlayer = nullptr;
     Cards m_pendCards;
     Cards m_allCards;
+    BetRecord m_betRecord;
+    int m_curBet = 0;
+
 };
 
 #endif // GAMECONTROL_H

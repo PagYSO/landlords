@@ -8,87 +8,78 @@ class Player : public QObject
 {
     Q_OBJECT
 public:
-    enum Role{lord,farmer};
-    enum Sex{Man,Woman};
-    enum Direction{left,right};
-    enum Type{Robot,User,Unknown};
+    enum Role{Lord, Farmer};    // 角色
+    enum Sex{Man, Woman};       // 性别
+    enum Direction{Left, Right};    // 头像的显示方位
+    enum Type{Robot, User, UnKnow}; // 玩家的类型
     explicit Player(QObject *parent = nullptr);
-    explicit Player(QString name,QObject *parent = nullptr);
+    explicit Player(QString name, QObject *parent = nullptr);
 
-    //名字
     void setName(QString name);
-    QString name();
+    QString getName();
 
-    //角色
     void setRole(Role role);
-    Role role();
+    Role getRole();
 
-    //性别
     void setSex(Sex sex);
-    Sex sex();
+    Sex getSex();
 
-    //方向
-    void setDirection(Direction dirc);
-    Direction dirc();
+    void setDirection(Direction direction);
+    Direction getDirection();
 
-    //类型
     void setType(Type type);
-    Type type();
-    \
-    //分数
+    Type getType();
+
     void setScore(int score);
-    int score();
+    int getScore();
 
     void setWin(bool flag);
     bool isWin();
 
-    //当前对象的上家与下家
     void setPrevPlayer(Player* player);
     void setNextPlayer(Player* player);
-    Player* PrevPlayer();
-    Player* NextPlayer();
+    Player* getPrevPlayer();
+    Player* getNextPlayer();
 
-    //枪地主
     void grabLordBet(int point);
 
-    //存储扑克牌
-    void StoreDispatchCard(Card& card);
-    void StoreDispatchCards(Cards& cards);
+    void storeDispatchCard(const Card& card);
+    void storeDispatchCard(const Cards& cards);
 
-    //得到所有牌
     Cards getCards();
-    //清空所有牌
     void clearCards();
-    //出牌
-    void playHand(Cards& cards);
+    void playHand(const Cards& cards);
 
-    //设置出牌的玩家已打出的牌
-    void setPendingInfo(Player* player,Cards& cards);
     Player* getPendPlayer();
     Cards getPendCards();
 
-    //虚函数
-    //利用多态来实现机器人准备叫地主与准备出牌
+    void storePendingInfo(Player* player, const Cards& cards);
+
     virtual void prepareCallLord();
     virtual void preparePlayHand();
     virtual void thinkCallLord();
     virtual void thinkPlayHand();
-signals:
 
-    //权限改为受保护的，使子类也能够继承
+
+
+signals:
+    void notifyGrabLordBet(Player* player, int bet);
+    void notifyPlayHand(Player* player, const Cards& card);
+    void notifyPickCards(Player* player, const Cards& cards);
+
 protected:
-    int m_score;
+    int m_score = 0;
     QString m_name;
     Role m_role;
     Sex m_sex;
-    Direction m_dirc;
+    Direction m_direction;
     Type m_type;
-    bool m_isWin;
-    Player* m_prev=nullptr;
-    Player* m_next=nullptr;
-    Cards m_cards;//存储多张扑克牌（玩家手中的牌）
-    Cards m_pendcards;//打出的牌
-    Player* m_pendplayer;//谁打出的牌
+    bool m_isWin = false;
+    Player* m_prev = nullptr;
+    Player* m_next = nullptr;
+    Cards m_cards;
+    Cards m_pendCards;
+    Player* m_pendPlayer = nullptr;
 };
 
 #endif // PLAYER_H
