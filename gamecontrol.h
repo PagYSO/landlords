@@ -65,6 +65,7 @@ public:
     int getPlayerMaxBet();
 
     void onGrabBet(Player* player, int bet);
+
     void onPlayHand(Player *player, const Cards &card);
 
 signals:

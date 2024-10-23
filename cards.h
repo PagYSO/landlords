@@ -4,54 +4,41 @@
 
 #include <QSet>
 
-
 class Cards
 {
 public:
-    enum SortType{Asc,Desc,NoSort};
+    enum SortType{Asc, Desc, NoSort};
     Cards();
     explicit Cards(const Card& card);
-    //添加扑克牌
+
     void add(const Card& card);
     void add(const Cards& cards);
-    void add(const QVector<Cards> &cards);
+    void add(const QVector<Cards>& cards);
 
-    //一次性插入多个数据（重载操作符<<）
 
     Cards& operator <<(const Card& card);
     Cards& operator <<(const Cards& cards);
 
-    //删除扑克牌
     void remove(const Card& card);
     void remove(const Cards& cards);
     void remove(const QVector<Cards>& cards);
 
-    //扑克牌的数量
-    int CardCount();
-
-    //是否为空
+    int cardCount();
     bool isEmpty();
     bool isEmpty() const;
+    void clear();
 
-    //清空扑克牌
-    void clearCard();
-
-    //最大点数
     Card::CardPoint maxPoint();
-    //最小点数
     Card::CardPoint minPoint();
-    //指定点数的数量
-    int PointCount(Card::CardPoint point);
-    //某张牌是否在集合里
-    bool Contains(const Card& card);
-    bool Contains(const Cards& cards);
+    int pointCount(Card::CardPoint point);
+    bool contains(const Card& card);
+    bool contains(const Cards& cards);
 
-    //随机取出一张牌
-    Card takeRandomcard();
+    Card takeRandomCard();
 
-    //QVector<Card>
-    //QSet->QVector
-    CardList toCardList(SortType type=Desc);
+    CardList toCardList(SortType type = Desc);
+
+    void printAllCardInfo();
 
 private:
     QSet<Card> m_cards;

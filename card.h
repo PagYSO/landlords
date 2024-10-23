@@ -3,23 +3,23 @@
 
 #include <QVector>
 
-
-
-
 class Card
 {
 public:
-    //花色
-    enum CardSuit{
-        Suit_begin,
+    // 花色
+    enum CardSuit
+    {
+        Suit_Begin,
         Diamond,
         Club,
         Heart,
         Spade,
-        Suit_end
+        Suit_End
     };
-    enum CardPoint{
-        Card_begin,
+    // 点数
+    enum CardPoint
+    {
+        Card_Begin,
         Card_3,
         Card_4,
         Card_5,
@@ -33,32 +33,32 @@ public:
         Card_K,
         Card_A,
         Card_2,
-        Card_SJoker,
-        Card_BJoker,
-        Card_end
+        Card_SJ,    // small joker
+        Card_BJ,     // big joker
+        Card_End
     };
 
     Card();
-    Card(CardPoint point,CardSuit suit);
+    Card(CardPoint point, CardSuit suit);
 
     void setPoint(CardPoint point);
     void setSuit(CardSuit suit);
     CardPoint point() const;
     CardSuit suit() const;
+
 private:
     CardPoint m_point;
     CardSuit m_suit;
 };
 
-bool lessSort(const Card& c1,const Card& c2);
-bool greaterSort(const Card& c1,const Card& c2);
+bool lessSort(const Card& c1, const Card& c2);
+bool greaterSort(const Card& c1, const Card& c2);
 bool operator <(const Card& c1, const Card& c2);
 
 bool operator ==(const Card& left, const Card& right);
 
 uint qHash(const Card& card);
 
-//别名的定义
-using CardList=QVector<Card>;
+using CardList = QVector<Card>;
 
 #endif // CARD_H

@@ -1,8 +1,8 @@
 #ifndef SCOREPANEL_H
 #define SCOREPANEL_H
 
-#include <QWidget>
 #include <QLabel>
+#include <QWidget>
 
 namespace Ui {
 class ScorePanel;
@@ -17,10 +17,9 @@ public:
     explicit ScorePanel(QWidget *parent = nullptr);
     ~ScorePanel();
 
-    //设置玩家的分
-    void setScore(int left,int right,int user);
-    void setMyFontColor(FontColor color);
+    void setScores(int left, int right, int user);
     void setMyFontSize(int point);
+    void setMyFontColor(FontColor color);
 
 private:
     Ui::ScorePanel *ui;

@@ -70,7 +70,7 @@ void GamePanel::gameControlInit()
 
 void GamePanel::updatePlayerScore()
 {
-    ui->scorePanel->setScore(
+    ui->scorePanel->setScores(
                 m_playerList[0]->getScore(),
                 m_playerList[1]->getScore(),
                 m_playerList[2]->getScore());
@@ -84,20 +84,20 @@ void GamePanel::initCardMap()
 
     m_cardBackImg = pixmap.copy(2*m_cardSize.width(), 4*m_cardSize.height(),
                                 m_cardSize.width(), m_cardSize.height());
-    for(int i=0, suit=Card::Suit_begin+1; suit<Card::Suit_end; ++suit, ++i)
+    for(int i=0, suit=Card::Suit_Begin+1; suit<Card::Suit_End; ++suit, ++i)
     {
-        for(int j=0, pt=Card::Card_begin+1; pt<Card::Card_SJoker; ++pt, ++j)
+        for(int j=0, pt=Card::Card_Begin+1; pt<Card::Card_SJ; ++pt, ++j)
         {
             Card card((Card::CardPoint)pt, (Card::CardSuit)suit);
             cropImage(pixmap, j*m_cardSize.width(), i*m_cardSize.height(), card);
         }
     }
     Card c;
-    c.setPoint(Card::Card_SJoker);
-    c.setSuit(Card::Suit_begin);
+    c.setPoint(Card::Card_SJ);
+    c.setSuit(Card::Suit_Begin);
     cropImage(pixmap, 0, 4*m_cardSize.height(), c);
 
-    c.setPoint(Card::Card_BJoker);
+    c.setPoint(Card::Card_BJ);
     cropImage(pixmap, m_cardSize.width(), 4*m_cardSize.height(), c);
 }
 
@@ -114,21 +114,21 @@ void GamePanel::cropImage(QPixmap &pix, int x, int y, Card& c)
 
 void GamePanel::initButtonsGroup()
 {
-    ui->btn_Group->initButtons();
-    ui->btn_Group->selectPanel(ButtonGroup::Start);
+    ui->btnGroup->initButtons();
+    ui->btnGroup->selectPanel(ButtonGroup::Start);
 
-    connect(ui->btn_Group, &ButtonGroup::startGame, this, [=](){
-        ui->btn_Group->selectPanel(ButtonGroup::Empty);
+    connect(ui->btnGroup, &ButtonGroup::startGame, this, [=](){
+        ui->btnGroup->selectPanel(ButtonGroup::Empty);
         m_gameCtl->clearPlayerScore();
         updatePlayerScore();
         gameStatusPrecess(GameControl::DispatchCard);
         m_bgm->startBGM(80);
     });
-    connect(ui->btn_Group, &ButtonGroup::playHand, this, &GamePanel::onUserPlayHand);
-    connect(ui->btn_Group, &ButtonGroup::pass, this, &GamePanel::onUserPass);
-    connect(ui->btn_Group, &ButtonGroup::betPoint, this, [=](int bet){
+    connect(ui->btnGroup, &ButtonGroup::playHand, this, &GamePanel::onUserPlayHand);
+    connect(ui->btnGroup, &ButtonGroup::pass, this, &GamePanel::onUserPass);
+    connect(ui->btnGroup, &ButtonGroup::betPoint, this, [=](int bet){
         m_gameCtl->getUserPlayer()->grabLordBet(bet);
-        ui->btn_Group->selectPanel(ButtonGroup::Empty);
+        ui->btnGroup->selectPanel(ButtonGroup::Empty);
     });
 }
 
@@ -224,7 +224,6 @@ void GamePanel::gameStatusPrecess(GameControl::GameStatus status)
     case GameControl::PlayingHand:
         m_baseCard->hide();
         m_moveCard->hide();
-        //显示三张底牌
         for(int i=0; i<m_last3Card.size(); ++i)
         {
             m_last3Card.at(i)->show();
@@ -234,7 +233,6 @@ void GamePanel::gameStatusPrecess(GameControl::GameStatus status)
             PlayerContext &context = m_contextMap[m_playerList.at(i)];
             context.info->hide();
             Player* player = m_playerList.at(i);
-            //显示头像
             QPixmap pixmap = loadRoleImage(player->getSex(), player->getDirection(), player->getRole());
             context.roleImg->setPixmap(pixmap);
             context.roleImg->show();
@@ -260,14 +258,14 @@ void GamePanel::startDispatchCard()
     int index = m_playerList.indexOf(m_gameCtl->getUserPlayer());
     for(int i=0; i<m_playerList.size(); ++i)
     {
-        m_contextMap[m_playerList.at(i)].lastCards.clearCard();
+        m_contextMap[m_playerList.at(i)].lastCards.clear();
         m_contextMap[m_playerList.at(i)].info->hide();
         m_contextMap[m_playerList.at(i)].roleImg->hide();
         m_contextMap[m_playerList.at(i)].isFrontSide = i==index ? true : false;
     }
     m_gameCtl->resetCardData();
     m_baseCard->show();
-    ui->btn_Group->selectPanel(ButtonGroup::Empty);
+    ui->btnGroup->selectPanel(ButtonGroup::Empty);
     m_timer->start(10);
     m_bgm->playAssistMusic(BGMControl::Dispatch);
 }
@@ -358,7 +356,6 @@ void GamePanel::updatePlayerCards(Player *player)
         }
     }
 
-    //得到并显示玩家打出的牌
     QRect playCardRect = m_contextMap[player].playHandRect;
     Cards lastCards = m_contextMap[player].lastCards;
     if(!lastCards.isEmpty())
@@ -373,7 +370,8 @@ void GamePanel::updatePlayerCards(Player *player)
             panel->raise();
             if(m_contextMap[player].align == Horizontal)
             {
-                int leftBase = playCardRect.left() +(playCardRect.width() - (lastCardList.size() - 1) * playSpacing - panel->width()) / 2;
+                int leftBase = playCardRect.left() +
+                        (playCardRect.width() - (lastCardList.size() - 1) * playSpacing - panel->width()) / 2;
                 int top = playCardRect.top() + (playCardRect.height() - panel->height()) /2 ;
                 panel->move(leftBase + i * playSpacing, top);
             }
@@ -442,7 +440,7 @@ void GamePanel::onDispatchCard()
         m_gameCtl->setCurrentPlayer(curPlayer->getNextPlayer());
         curMovePos = 0;
         cardMoveStep(curPlayer, curMovePos);
-        if(m_gameCtl->getSurplusCards().CardCount() == 3)
+        if(m_gameCtl->getSurplusCards().cardCount() == 3)
         {
             m_timer->stop();
             gameStatusPrecess(GameControl::CallingLord);
@@ -461,7 +459,7 @@ void GamePanel::onPlayerStatusChanged(Player *player, GameControl::PlayerStatus 
     case GameControl::ThinkingForCallLord:
         if(player == m_gameCtl->getUserPlayer())
         {
-            ui->btn_Group->selectPanel(ButtonGroup::CallLord, m_gameCtl->getPlayerMaxBet());
+            ui->btnGroup->selectPanel(ButtonGroup::CallLord, m_gameCtl->getPlayerMaxBet());
         }
         break;
     case GameControl::ThinkingForPlayHand:
@@ -471,16 +469,16 @@ void GamePanel::onPlayerStatusChanged(Player *player, GameControl::PlayerStatus 
             Player* pendPlayer = m_gameCtl->getPendPlayer();
             if(pendPlayer == m_gameCtl->getUserPlayer() || pendPlayer == nullptr)
             {
-                ui->btn_Group->selectPanel(ButtonGroup::PlayCard);
+                ui->btnGroup->selectPanel(ButtonGroup::PlayCard);
             }
             else
             {
-                ui->btn_Group->selectPanel(ButtonGroup::PassOrPlay);
+                ui->btnGroup->selectPanel(ButtonGroup::PassOrPlay);
             }
         }
         else
         {
-            ui->btn_Group->selectPanel(ButtonGroup::Empty);
+            ui->btnGroup->selectPanel(ButtonGroup::Empty);
         }
         break;
     case GameControl::Winning:
@@ -524,11 +522,9 @@ void GamePanel::onGrabLordBet(Player *player, int bet, bool flag)
 
 void GamePanel::onDisposePlayHand(Player *player, const Cards &cards)
 {
-    //存储玩家打出的牌
     auto it = m_contextMap.find(player);
     it->lastCards = cards;
     Cards& myCards = const_cast<Cards&>(cards);
-    //根据牌型播放特效
     PlayHand hand(myCards);
     PlayHand::HandType type = hand.getHandType();
     if(type == PlayHand::Hand_Plane ||
@@ -571,11 +567,11 @@ void GamePanel::onDisposePlayHand(Player *player, const Cards &cards)
         }
     }
     updatePlayerCards(player);
-    if(player->getCards().CardCount() == 2)
+    if(player->getCards().cardCount() == 2)
     {
         m_bgm->playLastMusic(BGMControl::Last2, (BGMControl::RoleSex)player->getSex());
     }
-    else if(player->getCards().CardCount() == 1)
+    else if(player->getCards().cardCount() == 1)
     {
         m_bgm->playLastMusic(BGMControl::Last1, (BGMControl::RoleSex)player->getSex());
     }
@@ -729,7 +725,7 @@ void GamePanel::hidePlayerDropCards(Player *player)
                 m_cardMap[*last]->hide();
             }
         }
-        it->lastCards.clearCard();
+        it->lastCards.clear();
     }
 }
 
@@ -765,7 +761,7 @@ void GamePanel::showEndingScorePanel()
          panel->close();
          panel->deleteLater();
          animation->deleteLater();
-         ui->btn_Group->selectPanel(ButtonGroup::Empty);
+         ui->btnGroup->selectPanel(ButtonGroup::Empty);
          gameStatusPrecess(GameControl::DispatchCard);
          m_bgm->startBGM(80);
     });

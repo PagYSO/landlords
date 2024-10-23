@@ -8,17 +8,18 @@
 #include <QRandomGenerator>
 #include <QTimer>
 
-
-BGMControl::BGMControl(QObject *parent)
-    : QObject{parent}
+BGMControl::BGMControl(QObject *parent) : QObject(parent)
 {
-    for(int i=0;i<5;i++){
-        QMediaPlayer* player=new QMediaPlayer(this);
-        QMediaPlaylist* list=new QMediaPlaylist(this);
-        if(i<2 || i==4){
+    for(int i=0; i<5; ++i)
+    {
+        QMediaPlayer* player = new QMediaPlayer(this);
+        QMediaPlaylist* list = new QMediaPlaylist(this);
+        if(i<2 || i == 4)
+        {
             list->setPlaybackMode(QMediaPlaylist::CurrentItemOnce);
         }
-        else if(i==2){
+        else if(i == 2)
+        {
             list->setPlaybackMode(QMediaPlaylist::Loop);
         }
         player->setPlaylist(list);
@@ -26,10 +27,10 @@ BGMControl::BGMControl(QObject *parent)
         m_players.push_back(player);
         m_lists.push_back(list);
     }
-    initPlayerList();
+    initPlayList();
 }
 
-void BGMControl::initPlayerList()
+void BGMControl::initPlayList()
 {
     QStringList list;
     list << "Man" << "Woman" << "BGM" << "Other" << "Ending";
@@ -50,7 +51,6 @@ void BGMControl::initPlayerList()
             m_lists[i]->addMedia(QMediaContent(QUrl(array.at(j).toString())));
         }
     }
-
 }
 
 void BGMControl::startBGM(int volume)
@@ -99,12 +99,12 @@ void BGMControl::playCardMusic(Cards cards, bool isFirst, RoleSex sex)
     int index = sex == Man ? 0 : 1;
     QMediaPlaylist* list = m_lists[index];
 
-    Card::CardPoint pt = Card::CardPoint::Card_begin;
+    Card::CardPoint pt = Card::CardPoint::Card_Begin;
     PlayHand hand(cards);
     PlayHand::HandType type = hand.getHandType();
     if(type == PlayHand::Hand_Single || type == PlayHand::Hand_Pair || type == PlayHand::Hand_Triple)
     {
-        pt = cards.takeRandomcard().point();
+        pt = cards.takeRandomCard().point();
     }
     int number = 0;
     switch(type)
@@ -143,6 +143,8 @@ void BGMControl::playCardMusic(Cards cards, bool isFirst, RoleSex sex)
         break;
     case PlayHand::Hand_Bomb_Pair:
     case PlayHand::Hand_Bomb_Two_Single:
+    case PlayHand::Hand_Bomb_Jokers_Pair:
+    case PlayHand::Hand_Bomb_Jokers_Two_Single:
         number = FourBindTwo;
 
     default:
@@ -229,4 +231,3 @@ void BGMControl::playEndingMusic(bool isWin)
     }
     m_players[4]->play();
 }
-

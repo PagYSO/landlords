@@ -49,7 +49,6 @@ void GameControl::playerInit()
     connect(m_robotLeft, &Robot::notifyPlayHand, this, &GameControl::onPlayHand);
     connect(m_robotRight, &Robot::notifyPlayHand, this, &GameControl::onPlayHand);
     connect(m_user, &Robot::notifyPlayHand, this, &GameControl::onPlayHand);
-
 }
 
 
@@ -90,22 +89,52 @@ Cards GameControl::getPendCards()
 
 void GameControl::initAllCards()
 {
-    m_allCards.clearCard();
-    for(int p = Card::Card_begin+1; p<Card::Card_SJoker; ++p)
+    m_allCards.clear();
+    for(int p = Card::Card_Begin+1; p<Card::Card_SJ; ++p)
     {
-        for(int s = Card::Suit_begin+1; s<Card::Suit_end; ++s)
+        for(int s = Card::Suit_Begin+1; s<Card::Suit_End; ++s)
         {
             Card c((Card::CardPoint)p, (Card::CardSuit)s);
             m_allCards.add(c);
         }
     }
-    m_allCards.add(Card(Card::Card_SJoker, Card::Suit_begin));
-    m_allCards.add(Card(Card::Card_BJoker, Card::Suit_begin));
+    m_allCards.add(Card(Card::Card_SJ, Card::Suit_Begin));
+    m_allCards.add(Card(Card::Card_BJ, Card::Suit_Begin));
 }
 
 Card GameControl::takeOneCard()
 {
-    return m_allCards.takeRandomcard();
+#if 0
+    // 测试飞机
+    static bool flag = true;
+    static Cards tmp;
+    if(flag)
+    {
+        Card c1(Card::Card_10, Card::Club);
+        Card c2(Card::Card_10, Card::Diamond);
+        Card c3(Card::Card_10, Card::Heart);
+
+        Card c4(Card::Card_J, Card::Club);
+        Card c5(Card::Card_J, Card::Diamond);
+        Card c6(Card::Card_J, Card::Heart);
+
+        tmp << c1 << c2 << c3 << c4 << c5 << c6;
+        m_allCards.remove(tmp);
+        flag = false;
+    }
+
+    if(getCurrentPlayer() == m_user && !tmp.isEmpty())
+    {
+        return tmp.takeRandomCard();
+    }
+    else
+    {
+        return m_allCards.takeRandomCard();
+    }
+#else
+    // not test code
+    return m_allCards.takeRandomCard();
+#endif
 }
 
 Cards GameControl::getSurplusCards()
@@ -120,7 +149,7 @@ void GameControl::resetCardData()
     m_robotRight->clearCards();
     m_user->clearCards();
     m_pendPlayer = nullptr;
-    m_pendCards.clearCard();
+    m_pendCards.clear();
 }
 
 void GameControl::startLordCard()

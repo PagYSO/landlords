@@ -18,6 +18,4 @@ signals:
     void startCountDown();
 };
 
-
-
 #endif // USERPLAYER_H

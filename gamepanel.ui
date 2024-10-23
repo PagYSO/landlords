@@ -55,7 +55,7 @@
      </spacer>
     </item>
     <item>
-     <widget class="ButtonGroup" name="btn_Group" native="true"/>
+     <widget class="ButtonGroup" name="btnGroup" native="true"/>
     </item>
     <item>
      <spacer name="verticalSpacer_2">
@@ -81,7 +81,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>28</height>
+     <height>29</height>
     </rect>
    </property>
   </widget>

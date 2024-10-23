@@ -21,8 +21,8 @@ PlayHand::PlayHand(HandType type, Card::CardPoint pt, int extra)
 void PlayHand::classify(Cards &cards)
 {
     CardList list = cards.toCardList();
-    int cardRecord[Card::Card_end];
-    memset(cardRecord, 0, sizeof(int) * Card::Card_end);
+    int cardRecord[Card::Card_End];
+    memset(cardRecord, 0, sizeof(int) * Card::Card_End);
 
     for(int i=0; i<list.size(); ++i)
     {
@@ -35,7 +35,7 @@ void PlayHand::classify(Cards &cards)
     m_threeCard.clear();
     m_fourCard.clear();
 
-    for(int i=0; i<Card::Card_end; ++i)
+    for(int i=0; i<Card::Card_End; ++i)
     {
         if(cardRecord[i] == 1)
         {
@@ -59,7 +59,7 @@ void PlayHand::classify(Cards &cards)
 void PlayHand::judgeCardType()
 {
     m_type = Hand_Unknown;
-    m_pt = Card::Card_begin;
+    m_pt = Card::Card_Begin;
     m_extra = 0;
 
     if(isPass())
@@ -277,7 +277,7 @@ bool PlayHand::isPlaneTwoSingle()
         std::sort(m_threeCard.begin(), m_threeCard.end());
         std::sort(m_oneCard.begin(), m_oneCard.end());
         if(m_threeCard[1] - m_threeCard[0] == 1 && m_threeCard[1] < Card::Card_2 &&
-                m_oneCard[0] != Card::Card_SJoker && m_oneCard[1] != Card::Card_BJoker)
+                m_oneCard[0] != Card::Card_SJ && m_oneCard[1] != Card::Card_BJ)
         {
             return true;
         }
@@ -358,7 +358,7 @@ bool PlayHand::isBombTwoSingle()
     if(m_oneCard.size() == 2 && m_twoCard.isEmpty() && m_threeCard.isEmpty() && m_fourCard.size() == 1)
     {
         std::sort(m_oneCard.begin(), m_oneCard.end());
-        if(m_oneCard.first() != Card::Card_SJoker && m_oneCard.last() != Card::Card_BJoker)
+        if(m_oneCard.first() != Card::Card_SJ && m_oneCard.last() != Card::Card_BJ)
         {
             return true;
         }
@@ -371,7 +371,7 @@ bool PlayHand::isBombJokers()
     if(m_oneCard.size() == 2 && m_twoCard.isEmpty() && m_threeCard.isEmpty() && m_fourCard.isEmpty())
     {
         std::sort(m_oneCard.begin(), m_oneCard.end());
-        if(m_oneCard.first() == Card::Card_SJoker && m_oneCard.last() == Card::Card_BJoker)
+        if(m_oneCard.first() == Card::Card_SJ && m_oneCard.last() == Card::Card_BJ)
         {
             return true;
         }
@@ -384,7 +384,7 @@ bool PlayHand::isBombJokersSingle()
     if(m_oneCard.size() == 3 && m_twoCard.isEmpty() && m_threeCard.isEmpty() && m_fourCard.isEmpty())
     {
         std::sort(m_oneCard.begin(), m_oneCard.end());
-        if(m_oneCard[1] == Card::Card_SJoker && m_oneCard[2] == Card::Card_BJoker)
+        if(m_oneCard[1] == Card::Card_SJ && m_oneCard[2] == Card::Card_BJ)
         {
             return true;
         }
@@ -397,7 +397,7 @@ bool PlayHand::isBombJokersPair()
     if(m_oneCard.size() == 2 && m_twoCard.size() == 1 && m_threeCard.isEmpty() && m_fourCard.isEmpty())
     {
         std::sort(m_oneCard.begin(), m_oneCard.end());
-        if(m_oneCard[0] == Card::Card_SJoker && m_oneCard[1] == Card::Card_BJoker)
+        if(m_oneCard[0] == Card::Card_SJ && m_oneCard[1] == Card::Card_BJ)
         {
             return true;
         }
@@ -410,10 +410,11 @@ bool PlayHand::isBombJokersTwoSingle()
     if(m_oneCard.size() == 4 && m_twoCard.isEmpty() && m_threeCard.isEmpty() && m_fourCard.isEmpty())
     {
         std::sort(m_oneCard.begin(), m_oneCard.end());
-        if(m_oneCard[2] == Card::Card_SJoker && m_oneCard[3] == Card::Card_BJoker)
+        if(m_oneCard[2] == Card::Card_SJ && m_oneCard[3] == Card::Card_BJ)
         {
             return true;
         }
     }
     return false;
 }
+

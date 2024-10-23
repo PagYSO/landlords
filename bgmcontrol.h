@@ -2,17 +2,18 @@
 #define BGMCONTROL_H
 
 #include "cards.h"
-#include <QMediaPlayer>
-#include <QMediaPlaylist>
 
 #include <QObject>
+#include <QMediaPlayer>
+#include <QMediaPlaylist>
 
 class BGMControl : public QObject
 {
     Q_OBJECT
 public:
-    enum RoleSex{Man,Woman};
-    enum CardType{
+    enum RoleSex{Man, Woman};
+    enum CardType
+    {
         Three,
         Foue,
         Five,
@@ -78,10 +79,10 @@ public:
         Rob2,
         Last1,          // 只剩1张牌
         Last2           // 只剩2张牌
-
     };
 
-    enum AssistMusic{
+    enum AssistMusic
+    {
         Dispatch,   // 发牌
         SelectCard, // 选牌
         PlaneVoice, // 飞机
@@ -91,7 +92,7 @@ public:
 
     explicit BGMControl(QObject *parent = nullptr);
 
-    void initPlayerList();
+    void initPlayList();
 
     void startBGM(int volume);
     void stopBGM();

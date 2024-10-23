@@ -1,8 +1,8 @@
 #ifndef PLAYHAND_H
 #define PLAYHAND_H
 
-#include <cards.h>
-#include <card.h>
+#include "card.h"
+#include "cards.h"
 
 
 

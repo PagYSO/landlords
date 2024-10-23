@@ -58,24 +58,24 @@ Cards Strategy::firstPlay()
     hasPair = hasTriple = hasPlane = false;
     Cards backup = m_cards;
 
-    QVector<Cards> bombArray = findCardType(PlayHand(PlayHand::Hand_Bomb, Card::Card_begin, 0), false);
+    QVector<Cards> bombArray = findCardType(PlayHand(PlayHand::Hand_Bomb, Card::Card_Begin, 0), false);
     backup.remove(bombArray);
 
-    QVector<Cards> planeArray = Strategy(m_player, backup).findCardType(PlayHand(PlayHand::Hand_Plane, Card::Card_begin, 0), false);
+    QVector<Cards> planeArray = Strategy(m_player, backup).findCardType(PlayHand(PlayHand::Hand_Plane, Card::Card_Begin, 0), false);
     if(!planeArray.isEmpty())
     {
         hasPlane = true;
         backup.remove(planeArray);
     }
 
-    QVector<Cards> seqTripleArray = Strategy(m_player, backup).findCardType(PlayHand(PlayHand::Hand_Triple, Card::Card_begin, 0), false);
+    QVector<Cards> seqTripleArray = Strategy(m_player, backup).findCardType(PlayHand(PlayHand::Hand_Triple, Card::Card_Begin, 0), false);
     if(!seqTripleArray.isEmpty())
     {
         hasTriple = true;
         backup.remove(seqTripleArray);
     }
 
-    QVector<Cards> seqPairArray = Strategy(m_player, backup).findCardType(PlayHand(PlayHand::Hand_Seq_Pair, Card::Card_begin, 0), false);
+    QVector<Cards> seqPairArray = Strategy(m_player, backup).findCardType(PlayHand(PlayHand::Hand_Seq_Pair, Card::Card_Begin, 0), false);
     if(!seqPairArray.isEmpty())
     {
         hasPair = true;
@@ -87,7 +87,7 @@ Cards Strategy::firstPlay()
         Cards maxPair;
         for(int i=0; i<seqPairArray.size(); ++i)
         {
-            if(seqPairArray[i].CardCount() > maxPair.CardCount())
+            if(seqPairArray[i].cardCount() > maxPair.cardCount())
             {
                 maxPair = seqPairArray[i];
             }
@@ -124,7 +124,7 @@ Cards Strategy::firstPlay()
             QVector<Cards> singleArray;
             for(Card::CardPoint point = Card::Card_3; point <= Card::Card_10; point = Card::CardPoint(point + 1))
             {
-                if(backup.PointCount(point) == 1)
+                if(backup.pointCount(point) == 1)
                 {
                     Cards single = Strategy(m_player, backup).findSamePointCards(point, 1);
                     if(!single.isEmpty())
@@ -157,7 +157,7 @@ Cards Strategy::firstPlay()
         {
             for(Card::CardPoint point = Card::Card_3; point <= Card::Card_A; point = Card::CardPoint(point+1))
             {
-                int pointCount = backup.PointCount(point);
+                int pointCount = backup.pointCount(point);
                 if(pointCount == 1)
                 {
                     Cards single = Strategy(m_player, backup).findSamePointCards(point, 1);
@@ -177,12 +177,12 @@ Cards Strategy::firstPlay()
         return seqTripleArray[0];
     }
     Player* nextPlayer = m_player->getNextPlayer();
-    if(nextPlayer->getCards().CardCount() == 1 && m_player->getRole() != nextPlayer->getRole())
+    if(nextPlayer->getCards().cardCount() == 1 && m_player->getRole() != nextPlayer->getRole())
     {
-        for(Card::CardPoint point = Card::CardPoint(Card::Card_end-1);
+        for(Card::CardPoint point = Card::CardPoint(Card::Card_End-1);
             point >= Card::Card_3; point = Card::CardPoint(point-1))
         {
-            int pointCount = backup.PointCount(point);
+            int pointCount = backup.pointCount(point);
             if(pointCount == 1)
             {
                 Cards single = Strategy(m_player, backup).findSamePointCards(point, 1);
@@ -198,9 +198,9 @@ Cards Strategy::firstPlay()
     else
     {
         for(Card::CardPoint point =  Card::Card_3;
-            point < Card::Card_end; point = Card::CardPoint(point+1))
+            point < Card::Card_End; point = Card::CardPoint(point+1))
         {
-            int pointCount = backup.PointCount(point);
+            int pointCount = backup.pointCount(point);
             if(pointCount == 1)
             {
                 Cards single = Strategy(m_player, backup).findSamePointCards(point, 1);
@@ -219,7 +219,7 @@ Cards Strategy::firstPlay()
 Cards Strategy::getGreaterCards(PlayHand type)
 {
     Player* pendPlayer = m_player->getPendPlayer();
-    if(pendPlayer != nullptr && pendPlayer->getRole() != m_player->getRole() && pendPlayer->getCards().CardCount() <= 3)
+    if(pendPlayer != nullptr && pendPlayer->getRole() != m_player->getRole() && pendPlayer->getCards().cardCount() <= 3)
     {
         QVector<Cards> bombs = findCardsByCount(4);
         for(int i=0; i<bombs.size(); ++i)
@@ -229,8 +229,8 @@ Cards Strategy::getGreaterCards(PlayHand type)
                 return bombs[i];
             }
         }
-        Cards sj = findSamePointCards(Card::Card_SJoker, 1);
-        Cards bj = findSamePointCards(Card::Card_BJoker, 1);
+        Cards sj = findSamePointCards(Card::Card_SJ, 1);
+        Cards bj = findSamePointCards(Card::Card_BJ, 1);
         if(!sj.isEmpty() && !bj.isEmpty())
         {
             Cards jokers;
@@ -247,7 +247,7 @@ Cards Strategy::getGreaterCards(PlayHand type)
         QVector<Cards> beatCardsArray = Strategy(m_player, cards).findCardType(type, true);
         if(!beatCardsArray.isEmpty())
         {
-            if(m_player->getRole() != nextPlayer->getRole() && nextPlayer->getCards().CardCount() <= 2)
+            if(m_player->getRole() != nextPlayer->getRole() && nextPlayer->getCards().cardCount() <= 2)
             {
                 return beatCardsArray.back();
             }
@@ -287,7 +287,7 @@ bool Strategy::whetherToBeat(Cards &cs)
             return true;
         }
         Card::CardPoint basePoint = PlayHand(cs).getCardPoint();
-        if(basePoint == Card::Card_2 || basePoint == Card::Card_SJoker || basePoint == Card::Card_BJoker)
+        if(basePoint == Card::Card_2 || basePoint == Card::Card_SJ || basePoint == Card::Card_BJ)
         {
             return false;
         }
@@ -302,7 +302,7 @@ bool Strategy::whetherToBeat(Cards &cs)
         }
 
         if(myHand.getHandType() == PlayHand::Hand_Pair && myHand.getCardPoint() == Card::Card_2
-                && pendPlayer->getCards().CardCount() >= 10 && m_player->getCards().CardCount() >= 5)
+                && pendPlayer->getCards().cardCount() >= 10 && m_player->getCards().cardCount() >= 5)
         {
             return false;
         }
@@ -316,7 +316,7 @@ Cards Strategy::findSamePointCards(Card::CardPoint point, int count)
     {
         return Cards();
     }
-    if(point == Card::Card_SJoker || point == Card::Card_BJoker)
+    if(point == Card::Card_SJ || point == Card::Card_BJ)
     {
         if(count > 1)
         {
@@ -325,8 +325,8 @@ Cards Strategy::findSamePointCards(Card::CardPoint point, int count)
 
         Card card;
         card.setPoint(point);
-        card.setSuit(Card::Suit_begin);
-        if(m_cards.Contains(card))
+        card.setSuit(Card::Suit_Begin);
+        if(m_cards.contains(card))
         {
             Cards cards;
             cards.add(card);
@@ -337,12 +337,12 @@ Cards Strategy::findSamePointCards(Card::CardPoint point, int count)
 
     int findCount = 0;
     Cards findCards;
-    for(int suit = Card::Suit_begin+1; suit < Card::Suit_end; suit++)
+    for(int suit = Card::Suit_Begin+1; suit < Card::Suit_End; suit++)
     {
         Card card;
         card.setPoint(point);
         card.setSuit((Card::CardSuit)suit);
-        if(m_cards.Contains(card))
+        if(m_cards.contains(card))
         {
             findCount ++;
             findCards.add(card);
@@ -363,9 +363,9 @@ QVector<Cards> Strategy::findCardsByCount(int count)
     }
 
     QVector<Cards> cardsArray;
-    for(Card::CardPoint point = Card::Card_3; point < Card::Card_end; point = (Card::CardPoint)(point+1))
+    for(Card::CardPoint point = Card::Card_3; point < Card::Card_End; point = (Card::CardPoint)(point+1))
     {
-        if(m_cards.PointCount(point) == count)
+        if(m_cards.pointCount(point) == count)
         {
             Cards cs;
             cs << findSamePointCards(point, count);
@@ -380,7 +380,7 @@ Cards Strategy::getRangeCards(Card::CardPoint begin, Card::CardPoint end)
     Cards rangeCards;
     for(Card::CardPoint point = begin; point < end; point = (Card::CardPoint)(point+1))
     {
-        int count = m_cards.PointCount(point);
+        int count = m_cards.pointCount(point);
         Cards cs = findSamePointCards(point, count);
         rangeCards << cs;
     }
@@ -446,7 +446,7 @@ QVector<Cards> Strategy::findCardType(PlayHand hand, bool beat)
 
 void Strategy::pickSeqSingles(QVector<QVector<Cards>> &allSeqRecord, const QVector<Cards> &seqSingle, const Cards &cards)
 {
-    QVector<Cards> allSeq = Strategy(m_player, cards).findCardType(PlayHand(PlayHand::Hand_Seq_Single, Card::Card_begin, 0), false);
+    QVector<Cards> allSeq = Strategy(m_player, cards).findCardType(PlayHand(PlayHand::Hand_Seq_Single, Card::Card_Begin, 0), false);
     if(allSeq.isEmpty())
     {
         allSeqRecord << seqSingle;
@@ -521,9 +521,9 @@ QVector<Cards> Strategy::pickOptimalSeqSingles()
 QVector<Cards> Strategy::getCards(Card::CardPoint point, int number)
 {
     QVector<Cards> findCardsArray;
-    for(Card::CardPoint pt=point; pt < Card::Card_end; pt = (Card::CardPoint)(pt + 1))
+    for(Card::CardPoint pt=point; pt < Card::Card_End; pt = (Card::CardPoint)(pt + 1))
     {
-        if(m_cards.PointCount(pt) == number)
+        if(m_cards.pointCount(pt) == number)
         {
             Cards cs = findSamePointCards(pt, number);
             findCardsArray << cs;
@@ -540,7 +540,7 @@ QVector<Cards> Strategy::getTripleSingleOrPair(Card::CardPoint begin, PlayHand::
         Cards remainCards = m_cards;
         remainCards.remove(findCardArray);
         Strategy st(m_player, remainCards);
-        QVector<Cards> cardsArray = st.findCardType(PlayHand(type, Card::Card_begin, 0), false);
+        QVector<Cards> cardsArray = st.findCardType(PlayHand(type, Card::Card_Begin, 0), false);
         if(!cardsArray.isEmpty())
         {
             for(int i=0; i<findCardArray.size(); ++i)
@@ -581,7 +581,7 @@ QVector<Cards> Strategy::getPlane2SingleOr2Pair(Card::CardPoint begin, PlayHand:
         Cards remainCards = m_cards;
         remainCards.remove(findCardArray);
         Strategy st(m_player, remainCards);
-        QVector<Cards> cardsArray = st.findCardType(PlayHand(type, Card::Card_begin, 0), false);
+        QVector<Cards> cardsArray = st.findCardType(PlayHand(type, Card::Card_Begin, 0), false);
         if(cardsArray.size() >= 2)
         {
             for(int i=0; i<findCardArray.size(); ++i)
@@ -615,7 +615,7 @@ QVector<Cards> Strategy::getSepPairOrSeqSingle(CardInfo &info)
                 if(cards.isEmpty() || (point + info.extra >= Card::Card_2))
                 {
                     found = false;
-                    seqCards.clearCard();
+                    seqCards.clear();
                     break;
                 }
                 else
@@ -701,7 +701,7 @@ Cards Strategy::getBaseSeqSingle(Card::CardPoint point)
 QVector<Cards> Strategy::getBomb(Card::CardPoint begin)
 {
     QVector<Cards> findcardsArray;
-    for(Card::CardPoint point = begin; point < Card::Card_end; point = (Card::CardPoint)(point + 1))
+    for(Card::CardPoint point = begin; point < Card::Card_End; point = (Card::CardPoint)(point + 1))
     {
         Cards cs = findSamePointCards(point, 4);
         if(!cs.isEmpty())

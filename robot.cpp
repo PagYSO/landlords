@@ -1,6 +1,6 @@
 #include "robot.h"
 #include "strategy.h"
-#include "robotgrablord.h"
+#include "robotgraplord.h"
 #include "robotplayhand.h"
 #include <QDebug>
 
@@ -11,8 +11,8 @@ Robot::Robot(QObject *parent) : Player(parent)
 
 void Robot::prepareCallLord()
 {
-    RobotGrabLord* subThread = new RobotGrabLord(this);
-    connect(subThread, &RobotGrabLord::finished, this, [=](){
+    RobotGrapLord* subThread = new RobotGrapLord(this);
+    connect(subThread, &RobotGrapLord::finished, this, [=](){
         qDebug() << "RobotGrapLord 子线程对象析构..." << ", Robot name: " << this->getName();
         subThread->deleteLater();
     });
@@ -22,7 +22,7 @@ void Robot::prepareCallLord()
 void Robot::preparePlayHand()
 {
     RobotPlayHand* subThread = new RobotPlayHand(this);
-    connect(subThread, &RobotGrabLord::finished, this, [=](){
+    connect(subThread, &RobotGrapLord::finished, this, [=](){
         qDebug() << "RobotPlayHand 子线程对象析构..." << ", Robot name: " << this->getName();
         subThread->deleteLater();
     });
@@ -34,7 +34,7 @@ void Robot::thinkCallLord()
 {
     int weight = 0;
     Strategy st(this, m_cards);
-    weight += st.getRangeCards(Card::Card_SJoker, Card::Card_BJoker).CardCount() * 6;
+    weight += st.getRangeCards(Card::Card_SJ, Card::Card_BJ).cardCount() * 6;
 
     QVector<Cards> optSeq = st.pickOptimalSeqSingles();
     weight += optSeq.size() * 5;
@@ -42,7 +42,7 @@ void Robot::thinkCallLord()
     QVector<Cards> bombs = st.findCardsByCount(4);
     weight += bombs.size() * 5;
 
-    weight += m_cards.PointCount(Card::Card_2) * 3;
+    weight += m_cards.pointCount(Card::Card_2) * 3;
 
     Cards tmp = m_cards;
     tmp.remove(optSeq);

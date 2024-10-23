@@ -27,7 +27,7 @@ SOURCES += \
     mybutton.cpp \
     player.cpp \
     robot.cpp \
-    robotgrablord.cpp \
+    robotgraplord.cpp \
     robotplayhand.cpp \
     scorepanel.cpp \
     strategy.cpp \
@@ -49,7 +49,7 @@ HEADERS += \
     mybutton.h \
     player.h \
     robot.h \
-    robotgrablord.h \
+    robotgraplord.h \
     robotplayhand.h \
     scorepanel.h \
     strategy.h \

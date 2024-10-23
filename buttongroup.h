@@ -16,10 +16,9 @@ public:
     explicit ButtonGroup(QWidget *parent = nullptr);
     ~ButtonGroup();
 
-    //初始化按钮
     void initButtons();
-    //Page页的切换
     void selectPanel(Panel type, int bet = 0);
+
 signals:
     void startGame();
     void playHand();

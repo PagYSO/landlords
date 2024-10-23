@@ -47,7 +47,7 @@ EndingPanel::EndingPanel(bool isLord, bool isWin,QWidget *parent)
 
 void EndingPanel::setPlayerScore(int left, int right, int me)
 {
-    m_score->setScore(left, right, me);
+    m_score->setScores(left, right, me);
 }
 
 void EndingPanel::paintEvent(QPaintEvent *ev)
